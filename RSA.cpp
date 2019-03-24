@@ -15,8 +15,7 @@ RSA::key_generate( long int security_value )
     code_key ck;
     long int prime_number1 = prime_number_seach( ( rand() % security_value ) + security_value );
     long int prime_number2 = prime_number_seach( ( rand() % security_value ) + security_value );
-    std::cout<< "素数1 " << prime_number1 <<"\n";
-    std::cout<< "素数2 " << prime_number2 <<"\n";
+
     ck.public_key_1 = 65537;
     ck.public_key_2 = prime_number1 * prime_number2;
     
