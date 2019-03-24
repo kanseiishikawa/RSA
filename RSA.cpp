@@ -6,46 +6,32 @@
 #include <cmath>
 #include <numeric>
 #include "RSA.h"
-/*
-int main()
-{
-    code_key ck = key_generate( 10000 );
-    int64_t a = 1000;
-    int64_t c = powmod( a, ck.public_key_1, ck.public_key_2 );
-    int64_t m = powmod( c, ck.secret_key, ck.public_key_2 );
-    std::cout<< "公開鍵1 " << ck.public_key_1 <<"\n";
-    std::cout<< "公開鍵2 " << ck.public_key_2 <<"\n";
-    std::cout<< "秘密鍵 " << ck.secret_key <<"\n";
-    std::cout<< "メッセージ " << a <<"\n";
-    std::cout<< "暗号化 " << c <<"\n";
-    std::cout<< "復号 " << m <<"\n";
-}
-*/
 
 //公開鍵と秘密鍵の生成を行う
 RSA::code_key
-RSA::key_generate( int64_t security_value )
+RSA::key_generate( long int security_value )
 {
     std::srand( time(NULL) );
     code_key ck;
-    int64_t prime_number1 = prime_number_seach( ( rand() % security_value ) + security_value );
-    int64_t prime_number2 = prime_number_seach( ( rand() % security_value ) + security_value );
-
+    long int prime_number1 = prime_number_seach( ( rand() % security_value ) + security_value );
+    long int prime_number2 = prime_number_seach( ( rand() % security_value ) + security_value );
+    std::cout<< "素数1 " << prime_number1 <<"\n";
+    std::cout<< "素数2 " << prime_number2 <<"\n";
     ck.public_key_1 = 65537;
     ck.public_key_2 = prime_number1 * prime_number2;
     
-    int64_t L = lcm( prime_number1 - 1, prime_number2 - 1 );
+    long int L = lcm( prime_number1 - 1, prime_number2 - 1 );
     
     ck.secret_key = extEuqlid( ck.public_key_1 , L);
     
     return ck;
 }
 
-int64_t
-RSA::powmod( int64_t msg, int64_t exp, int64_t mod )
+long int
+RSA::powmod( long int msg, long int exp, long int mod )
 {
-    int64_t result = 1;
-
+    long int result = 1;
+    
     while( exp > 0 )
     {
         if( ( exp & 1 ) == 1 )
@@ -61,21 +47,21 @@ RSA::powmod( int64_t msg, int64_t exp, int64_t mod )
 }
 
 //拡張ユーグリッド互除法
-int64_t
-RSA::extEuqlid( int64_t a, int64_t b )
+long int
+RSA::extEuqlid( long int a, long int b )
 {
-    int64_t x1 = 0, y1 = 1, r1 = b;
-    int64_t x2 = 1, y2 = 0, r2 = a;
+    long int x1 = 0, y1 = 1, r1 = b;
+    long int x2 = 1, y2 = 0, r2 = a;
 
-    int64_t d;
+    long int d;
 
     while( true )
     {
         
-        int64_t q = r1 / r2;
-        int64_t r = r1 % r2;
-        int64_t x = x1 - x2 * q;
-        int64_t y = y1 - y2 * q;
+        long int q = r1 / r2;
+        long int r = r1 % r2;
+        long int x = x1 - x2 * q;
+        long int y = y1 - y2 * q;
 
         if( r == 0 )
         {
@@ -95,8 +81,8 @@ RSA::extEuqlid( int64_t a, int64_t b )
     return d;
 }
 
-int64_t
-RSA::prime_number_seach( int64_t standard )
+long int
+RSA::prime_number_seach( long int standard )
 {
     bool discover = false;
     standard = abs( standard );
@@ -107,7 +93,7 @@ RSA::prime_number_seach( int64_t standard )
         
         if( standard % 2 != 0 )
         {
-            for( int64_t i = 3; i < sqrt( standard ); i += 2)
+            for( long int i = 3; i < sqrt( standard ); i += 2)
             {
                 if( standard % i == 0 )
                 {
@@ -131,15 +117,15 @@ RSA::prime_number_seach( int64_t standard )
     return standard;
 }
 
-int64_t
-RSA::gcd( int64_t x, int64_t y )
+long int
+RSA::gcd( long int x, long int y )
 {
-    int64_t min = ( x < y ) ? x : y;
-    int64_t max = ( x < y ) ? y : x;
+    long int min = ( x < y ) ? x : y;
+    long int max = ( x < y ) ? y : x;
     
     while( 1 )
     {
-        int64_t mod = max % min;
+        long int mod = max % min;
         
         if( mod == 0 )
         {
@@ -153,8 +139,8 @@ RSA::gcd( int64_t x, int64_t y )
     return 1;
 }
 
-int64_t
-RSA::lcm( int64_t x, int64_t y )
+long int
+RSA::lcm( long int x, long int y )
 {
     return ( x * y ) / gcd( x, y );
 }
